@@ -1,10 +1,14 @@
-package com.example.bookApi.model;
+package com.example.bookApi.model.entity;
 
+import com.example.bookApi.model.enums.UserRole;
+import com.example.bookApi.model.enums.UserStatus;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
 
 @Entity
@@ -17,7 +21,9 @@ public class User {
     private String firstName;
     private String password;
     private String mail;
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public User(String lastName, String firstName,String password, String mail,  UserStatus status, UserRole role) {

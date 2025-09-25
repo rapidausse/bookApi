@@ -1,10 +1,12 @@
-package com.example.bookApi.model;
+package com.example.bookApi.model.entity;
 
+import com.example.bookApi.model.enums.BookStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 @Entity
 public class Book {
     @Id
@@ -15,12 +17,21 @@ public class Book {
     private int year;
     private String genre;
 
-    public Book( String title, String author, int year, String genre) {
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
+
+    public Book( String title, String author, int year, String genre, BookStatus status) {
         this.title = title;
         this.author = author;
         this.year = year;
         this.genre = genre;
+        this.status = status;
     }
+
+    public Book( String title, String author, int year, String genre) {
+        this(title, author, year, genre, BookStatus.NOT_AVAILABLE);
+    }
+
 
     public Book() {}
 
@@ -57,6 +68,14 @@ public class Book {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public BookStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookStatus status) {
+        this.status = status;
     }
 }
 

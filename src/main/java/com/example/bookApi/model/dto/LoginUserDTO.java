@@ -1,4 +1,4 @@
-package com.example.bookApi.model;
+package com.example.bookApi.model.dto;
 
 public class LoginUserDTO {
     public String mail;

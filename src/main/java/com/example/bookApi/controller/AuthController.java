@@ -1,7 +1,7 @@
 package com.example.bookApi.controller;
 
-import com.example.bookApi.model.LoginUserDTO;
-import com.example.bookApi.model.User;
+import com.example.bookApi.model.dto.LoginUserDTO;
+import com.example.bookApi.model.entity.User;
 import com.example.bookApi.repository.UserRepository;
 import com.example.bookApi.service.JwtUtil;
 import org.springframework.web.bind.annotation.*;

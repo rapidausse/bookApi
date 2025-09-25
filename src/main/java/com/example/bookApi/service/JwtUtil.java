@@ -1,13 +1,12 @@
 package com.example.bookApi.service;
 
-import com.example.bookApi.model.UserRole;
+import com.example.bookApi.model.enums.UserRole;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
-import io.jsonwebtoken.security.Keys;
 
 import java.util.Date;
 import java.security.Key;
