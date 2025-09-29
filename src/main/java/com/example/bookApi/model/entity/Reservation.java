@@ -1,8 +1,10 @@
 package com.example.bookApi.model.entity;
 
+import com.example.bookApi.model.enums.ReservationStatus;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
 
 @Entity
 public class Reservation {
@@ -18,16 +20,22 @@ public class Reservation {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime startDate;
+    private Instant startDate;
 
-    private LocalDateTime endDate;
+    private Instant endDate;
 
-    public Reservation(Book book, User user, LocalDateTime startDate, LocalDateTime endDate) {
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
+
+    public Reservation(Book book, User user, Instant  startDate, Instant  endDate, ReservationStatus status) {
         this.book = book;
         this.user = user;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.status = status;
     }
+
+    public Reservation() { }
 
     public Long getId() {
         return id;
@@ -53,19 +61,27 @@ public class Reservation {
         this.user = user;
     }
 
-    public LocalDateTime getStartDate() {
+    public Instant  getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Instant  startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public Instant  getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Instant  endDate) {
         this.endDate = endDate;
+    }
+
+    public ReservationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
     }
 }

@@ -1,12 +1,12 @@
 package com.example.bookApi.model.dto;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class ReservationDTO {
     private Long userId;
     private Long bookId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private ZonedDateTime startDate;
+    private ZonedDateTime endDate;
 
     public Long getUserId() {
         return userId;
@@ -24,19 +24,19 @@ public class ReservationDTO {
         this.bookId = bookId;
     }
 
-    public LocalDateTime getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(ZonedDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public ZonedDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(ZonedDateTime endDate) {
         this.endDate = endDate;
     }
 }
