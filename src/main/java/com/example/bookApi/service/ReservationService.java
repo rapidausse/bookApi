@@ -11,8 +11,10 @@ import com.example.bookApi.repository.ReservationRepository;
 import com.example.bookApi.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.List;
@@ -54,13 +56,13 @@ public class ReservationService {
 
 
         User user = userRepository.findById(reservationDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         Book book = bookRepository.findById(reservationDTO.getBookId())
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
         if (book.getStatus() != BookStatus.AVAILABLE) {
-            throw new IllegalStateException("The book is not available for a reservation");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Book is not available for reservation");
         }
 
 
@@ -72,7 +74,7 @@ public class ReservationService {
         );
 
         if (!reservations.isEmpty()) {
-            throw new IllegalStateException("The book is already reserved for the selected period");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Book is already reserved for the selected period");
         }
 
         Reservation reservation = new Reservation(book,user,startDateUtc,endDateUtc, ReservationStatus.NOT_ACTIVE);
@@ -80,7 +82,7 @@ public class ReservationService {
     }
 
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void activatePendingReservations() {
         Instant now = Instant.now();
         List<Reservation> reservations = reservationRepository.findNotActiveBeforeNow(ReservationStatus.NOT_ACTIVE, now);
@@ -93,7 +95,7 @@ public class ReservationService {
     }
 
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void expireActiveReservations() {
         Instant now = Instant.now();
         List<Reservation> reservations = reservationRepository.findActiveAfterNow(ReservationStatus.ACTIVE, now);

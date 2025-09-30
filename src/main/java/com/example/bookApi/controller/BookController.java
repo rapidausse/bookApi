@@ -1,12 +1,16 @@
 package com.example.bookApi.controller;
 
+import com.example.bookApi.model.dto.BookDTO;
 import com.example.bookApi.model.entity.Book;
 import com.example.bookApi.model.enums.BookStatus;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.example.bookApi.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/books")
@@ -24,26 +28,29 @@ public class BookController {
     @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     @GetMapping("/{id}")
     public Book getBook(@PathVariable Long id) {
+        System.out.println(">>> Controller executed with id=" + id);
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
+    public Book createBook(@Valid @RequestBody BookDTO bookDTO) {
+        Book book = new Book(bookDTO.getTitle(),bookDTO.getAuthor(),bookDTO.getYear(),bookDTO.getGenre());
         return bookRepository.save(book);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
+    public Book updateBook(@PathVariable Long id,@Valid @RequestBody BookDTO bookDTO) {
         Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
-        existingBook.setTitle(book.getTitle());
-        existingBook.setAuthor(book.getAuthor());
-        existingBook.setYear(book.getYear());
-        existingBook.setGenre(book.getGenre());
+        existingBook.setTitle(bookDTO.getTitle());
+        existingBook.setAuthor(bookDTO.getAuthor());
+        existingBook.setYear(bookDTO.getYear());
+        existingBook.setGenre(bookDTO.getGenre());
+        existingBook.setStatus(bookDTO.getStatus());
 
         return bookRepository.save(existingBook);
     }
@@ -51,7 +58,12 @@ public class BookController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable Long id) {
-        bookRepository.deleteById(id);
-        return "Book deleted";
+        Book existingBook = bookRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+
+        existingBook.setStatus(BookStatus.DELETED);
+        bookRepository.save(existingBook);
+
+        return  "Book deleted";
     }
 }

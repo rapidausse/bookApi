@@ -4,8 +4,11 @@ import com.example.bookApi.model.dto.LoginUserDTO;
 import com.example.bookApi.model.entity.User;
 import com.example.bookApi.repository.UserRepository;
 import com.example.bookApi.service.JwtUtil;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class AuthController {
@@ -23,10 +26,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginUserDTO loginUserDTO) {
+    public String login(@Valid @RequestBody LoginUserDTO loginUserDTO) {
 
         User user = userRepository.findByMail(loginUserDTO.getMail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (!passwordEncoder.matches(loginUserDTO.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");

@@ -1,7 +1,11 @@
 package com.example.bookApi.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginUserDTO {
+    @NotBlank(message = "Mail is required")
     public String mail;
+    @NotBlank(message = "Password is required")
     public String password;
 
     public String getMail() {

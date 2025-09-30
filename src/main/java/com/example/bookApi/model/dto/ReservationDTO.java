@@ -1,11 +1,17 @@
 package com.example.bookApi.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.ZonedDateTime;
 
 public class ReservationDTO {
+    @NotBlank(message = "userId is required")
     private Long userId;
+    @NotBlank(message = "bookId is required")
     private Long bookId;
+    @NotBlank(message = "startDate is required")
     private ZonedDateTime startDate;
+    @NotBlank(message = "endDate is required")
     private ZonedDateTime endDate;
 
     public Long getUserId() {

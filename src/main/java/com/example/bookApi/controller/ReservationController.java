@@ -10,9 +10,12 @@ import com.example.bookApi.repository.ReservationRepository;
 import com.example.bookApi.repository.UserRepository;
 import com.example.bookApi.service.ReservationService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -37,19 +40,15 @@ public class ReservationController {
     @GetMapping("/{id}")
     public Reservation getReservation(@PathVariable Long id) {
         return reservationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not found"));
+
     }
 
 
 
     @PreAuthorize("hasAnyRole('CUSTOMER')")
     @PostMapping
-    public  Reservation create(@RequestBody ReservationDTO reservationDTO){
+    public  Reservation create( @Valid @RequestBody ReservationDTO reservationDTO){
         return  reservationService.create(reservationDTO);
     }
-
-
-
-
-
 }
