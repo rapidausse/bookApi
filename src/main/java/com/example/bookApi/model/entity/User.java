@@ -2,20 +2,23 @@ package com.example.bookApi.model.entity;
 
 import com.example.bookApi.model.enums.UserRole;
 import com.example.bookApi.model.enums.UserStatus;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
+import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
+import jakarta.persistence.*;
 
 
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(length = 36, updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID id;
 
     private String lastName;
     private String firstName;
@@ -40,11 +43,11 @@ public class User {
 
     public User(){}
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

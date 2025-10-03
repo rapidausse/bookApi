@@ -1,15 +1,9 @@
 package com.example.bookApi.controller;
 
 import com.example.bookApi.model.dto.ReservationDTO;
-import com.example.bookApi.model.entity.Book;
 import com.example.bookApi.model.entity.Reservation;
-import com.example.bookApi.model.entity.User;
-import com.example.bookApi.model.enums.BookStatus;
-import com.example.bookApi.repository.BookRepository;
 import com.example.bookApi.repository.ReservationRepository;
-import com.example.bookApi.repository.UserRepository;
 import com.example.bookApi.service.ReservationService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/reservations")
@@ -38,7 +33,7 @@ public class ReservationController {
 
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN)")
     @GetMapping("/{id}")
-    public Reservation getReservation(@PathVariable Long id) {
+    public Reservation getReservation(@PathVariable UUID id) {
         return reservationRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not found"));
 

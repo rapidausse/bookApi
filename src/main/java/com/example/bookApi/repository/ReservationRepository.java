@@ -8,15 +8,16 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
-public interface ReservationRepository  extends JpaRepository<Reservation, Long>  {
+public interface ReservationRepository  extends JpaRepository<Reservation, UUID>  {
 
     @Query("SELECT r FROM Reservation r " +
             "WHERE r.book.id = :bookId " +
             "AND r.endDate > :startDate " +
             "AND r.startDate < :endDate")
     List<Reservation> findOverlappingReservations(
-            @Param("bookId") Long bookId,
+            @Param("bookId") UUID bookId,
             @Param("startDate") Instant  startDate,
             @Param("endDate") Instant  endDate);
 

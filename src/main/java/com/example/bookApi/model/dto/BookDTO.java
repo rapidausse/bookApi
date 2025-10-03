@@ -1,18 +1,17 @@
 package com.example.bookApi.model.dto;
 
 import com.example.bookApi.model.enums.BookStatus;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class BookDTO {
 
-    @NotBlank(message = "Title is required")
+    @NotNull(message = "Title is required")
     private String title;
-    @NotBlank(message = "Author is required")
+    @NotNull(message = "Author is required")
     private String author;
     @NotNull(message = "Year is required")
     private int year;
-    @NotBlank(message = "Genre is required")
+    @NotNull(message = "Genre is required")
     private String genre;
     private BookStatus status;
 

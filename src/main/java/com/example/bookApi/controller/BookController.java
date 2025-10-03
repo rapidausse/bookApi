@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.bookApi.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,7 +29,7 @@ public class BookController {
 
     @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable Long id) {
+    public Book getBook(@PathVariable UUID id) {
         System.out.println(">>> Controller executed with id=" + id);
         return bookRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
@@ -42,7 +44,7 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public Book updateBook(@PathVariable Long id,@Valid @RequestBody BookDTO bookDTO) {
+    public Book updateBook(@PathVariable UUID id,@Valid @RequestBody BookDTO bookDTO) {
         Book existingBook = bookRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
@@ -57,7 +59,7 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public String deleteBook(@PathVariable Long id) {
+    public String deleteBook(@PathVariable UUID id) {
         Book existingBook = bookRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
