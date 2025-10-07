@@ -34,16 +34,18 @@ public class JwtUtil {
     }
 
     public String extractUserMail(String token) {
-        Claims claims = Jwts.parser()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
     }
 
     public UserRole extractUserRole(String token) {
-        Claims claims = Jwts.parser()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
         return UserRole.valueOf(claims.get("role", String.class));
@@ -51,8 +53,9 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Claims claims = Jwts.parser()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getExpiration().after(new Date());
