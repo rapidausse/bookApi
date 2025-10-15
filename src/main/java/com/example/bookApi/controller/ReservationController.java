@@ -24,14 +24,12 @@ public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER)")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @GetMapping
     public List<Reservation> getAllReservation(){
         return reservationRepository.findAll();
     }
-
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN)")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @GetMapping("/{id}")
     public Reservation getReservation(@PathVariable UUID id) {
         return reservationRepository.findById(id)
@@ -40,8 +38,7 @@ public class ReservationController {
     }
 
 
-
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping
     public  Reservation create( @Valid @RequestBody ReservationDTO reservationDTO){
         return  reservationService.create(reservationDTO);
